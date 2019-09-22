@@ -6,7 +6,10 @@ using UnityEngine;
 // A direction is active while the corresponding key is pressed and the opposite key is not pressed. If a key is pressed while 
 // its opposite is already pressed, then said key will not count as input (that direction will not be flagged as active).
 // For example, if down is currently pressed, and the user enters up, then down will stay active and up will remain inactive.
-// To be used by a player movement script.
+// Special keys, grapple and pull, were added for the special powers the player in this game has. Grapple and pull are opposites, 
+// like up and down.
+// This is to be used by a player movement script.
+
 public class PlayerInput : MonoBehaviour
 {
     [Header("Which keys for up, left, right, down input.")]
@@ -15,7 +18,7 @@ public class PlayerInput : MonoBehaviour
     public string rightKey = "d";
     public string downKey = "s";
     public string grappleKey = "return";
-    public string pullKey = "p";
+    public string pullKey = "shift";
 
     [Tooltip("Is input currently accepted.")]
     public bool isReady = true;
