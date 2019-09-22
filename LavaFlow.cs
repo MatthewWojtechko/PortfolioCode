@@ -1,5 +1,6 @@
 /*
-	Produces a flowy stretch effect for the lava in Vamoose.
+	Produces a flowy stretch effect for the lava in Vamoose. It does this by gradually increasing
+	and decreasing the X scale and y scale.
 */
 
 using System.Collections;
@@ -31,16 +32,10 @@ public class LavaFlow : MonoBehaviour
         yScaleStart = transform.localScale.y;
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     // Update is called once per frame
     void Update()
     {
-        if (xStretchPositive)
+        if (xStretchPositive)	// if X scale is increasing
         {
             xCurrentSpeed = Mathf.Lerp(xCurrentSpeed, xSpeed, xLerpC);
             currentXStretch += xCurrentSpeed * Time.deltaTime;
@@ -61,7 +56,7 @@ public class LavaFlow : MonoBehaviour
             }
         }
 
-        if (yStretchPositive)
+        if (yStretchPositive)	// if Y scale is increasing
         {
             yCurrentSpeed = Mathf.Lerp(yCurrentSpeed, ySpeed, yLerpC);
             currentYStretch += yCurrentSpeed * Time.deltaTime;
