@@ -1,4 +1,5 @@
-﻿using System.Collections;
+// When a player stands on top of a moving platform, move them with the platform.
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
