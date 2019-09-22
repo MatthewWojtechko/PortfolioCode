@@ -23,6 +23,7 @@ public class MusicManager : MonoBehaviour
 
     void Awake()
     {
+    	// Adds listeners for messages on when to start playing music.
         Messenger.AddListener(GameEvent.START_LEVEL_ONE, levelOnePlay);
         Messenger.AddListener(GameEvent.START_LEVEL_TWO, levelTwoPlay);
         Messenger.AddListener(GameEvent.START_LEVEL_THREE, levelThreePlay);
@@ -34,6 +35,7 @@ public class MusicManager : MonoBehaviour
 
     void OnDestroy()
     {
+    	// Listeners must be removed when this object is destroyed to prevent errors.
         Messenger.RemoveListener(GameEvent.START_LEVEL_ONE, levelOnePlay);
         Messenger.RemoveListener(GameEvent.START_LEVEL_TWO, levelTwoPlay);
         Messenger.RemoveListener(GameEvent.START_LEVEL_THREE, levelThreePlay);
@@ -41,12 +43,6 @@ public class MusicManager : MonoBehaviour
         Messenger.RemoveListener(GameEvent.TRANSITION_TO_THREE, threeTransition);
         Messenger.RemoveListener(GameEvent.FINAL_TRANSITION, finalTransition);
         Messenger.RemoveListener(GameEvent.END_SCENE, endscene);
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
     }
 
     // Update is called once per frame
@@ -112,46 +108,48 @@ public class MusicManager : MonoBehaviour
         return Numbers[Random.Range(0, Numbers.Count)];
     }
 
-    // For the listeners.
+    // The functions are called via the Messenger listeners.
     private void levelOnePlay()
     {
-        startMusicForLevel(1, 0);
+        startMusicForLevel(1, 0);	// play level 1 music
         musicOn = true;
     }
     private void levelTwoPlay()
     {
-        startMusicForLevel(2, 0);
+        startMusicForLevel(2, 0);	// play level 2 music
         musicOn = true;
     }
     private void levelThreePlay()
     {
-        startMusicForLevel(3, 0);
+        startMusicForLevel(3, 0);	// play level 3 music
         musicOn = true;
     }
     public void twoTransition()
     {
         StartCoroutine(AudioFadeOut.FadeOut(lastSong, 0.1f));
-        startMusicForLevel(2, 1);
+        startMusicForLevel(2, 1);	// play music for level 2, starting with normal transition song
         musicOn = true;
     }
     public void threeTransition()
     {
         StartCoroutine(AudioFadeOut.FadeOut(lastSong, 0.1f));
-        normalTransSong.Play();
-        //startMusicForLevel(3, 1);
+        normalTransSong.Play();		// special case, play the normal transition song...
         musicOn = false;
     }
     public void finalTransition()
     {
         StartCoroutine(AudioFadeOut.FadeOut(lastSong, 0.1f));
-        startMusicForLevel(3, 2);
+        startMusicForLevel(3, 2);	// ...but then play music for level 3, starting with the surprise transition song
         musicOn = true;
     }
 
 
 
-    // Starts playing songs for a given level. Fills the SongQueue with random order of them.
-    // transMusic: 0 = none, 1 = normal, 2 = final
+    // Starts playing songs for a given level. Fills the SongQueue with random order of the songs from the current level.
+    // transMusic represents whether the normal transition music should be played, whether the special final transition 
+    // music should be played, or whether no transition music should play. 
+    // Here is a key for transMusic: 0 = none, 1 = normal, 2 = final
+    // If one of the transition music pieces should be played (1 or 2), puts that music piece at the beginning of the SongQueue.
     public void startMusicForLevel(int level, int transMusic)   
     {
         currentLevel = level;
@@ -164,7 +162,7 @@ public class MusicManager : MonoBehaviour
 
         currentSongIndex = 0;
 
-        if (transMusic > 0) // if the transitio song should be played first, make that first in the queue
+        if (transMusic > 0) // if a transition song should be played first, make that first in the queue
         {
             AudioSource[] newSongQueue = new AudioSource[SongQueue.Length];
             AudioSource tempTransSong;
