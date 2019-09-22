@@ -61,19 +61,19 @@ public class LavaMovement : MonoBehaviour
                     SFXplayed = true;
                 }
 
-                if (catchupDistance < 4)    // if nearing, ease into new normal speed
+                if (catchupDistance < 4)    // if nearing the player, ease into new normal speed
                 {
                     float tempLerpCon = 0.1f / Mathf.Abs(catchupDistance);
                     currentCatchupSpeed = Mathf.Lerp(currentCatchupSpeed, currentNormalSpeed, tempLerpCon);
                 }
-                else // else, far away, so max speed!
+                else // else, the lava is far away, so max speed!
                 {
                     currentCatchupSpeed = catchUpSpeed;
                 }
 
-                //currentCatchupSpeed = Mathf.Lerp(currentCatchupSpeed, currentNormalSpeed, catchupLerpConstant);
                 this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y + (currentCatchupSpeed * Time.deltaTime), this.transform.position.z);
             }
+	    
             // lava SFX are louder when nearer
             volume = 20 - Mathf.Abs(player.transform.position.y - this.transform.position.y);
             if (volume < 0.1f)
@@ -84,11 +84,11 @@ public class LavaMovement : MonoBehaviour
     }
 
     // Determines if the player has crossed one of the invisible trip wires. These trip wires represent heights that, once reached 
-    // by the player, the lava should be at lease at another cetain height. If the lava is "running late" in this way, this script
+    // by the player, the lava should be at least at another certain height. If the lava is "running late" in this way, this script
     // enables the lava to "catch up." 
     // When Infinity is returned, this means the lava is "on time."
     // Otherwise, it means the lava must move at a higher speed than usual -- the value returned from this method represents 
-    // the distance of between the lava's current y locaiton, and where it needs to be.
+    // the distance between the lava's current y locaiton, and where it needs to be.
     // Also, updates the current speed according to the highest trip wire the player crossed.
     private float posSpeedAdjustment()
     {
@@ -122,6 +122,7 @@ public class LavaMovement : MonoBehaviour
         return Mathf.Infinity;
     }
 
+    // If they player touches the lava, they're dead!
     private void OnTriggerEnter2D(Collider2D collider)
     {
         if (collider.gameObject.tag == "Player")
