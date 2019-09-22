@@ -1,11 +1,17 @@
 /*
 	Sets up the shape and position of a newly spawned asteroid for a simple Asteroids game.
+	Asteroids spawn near one of several waypoints that are far away from the player. 
+	At first, asteroids do not collide. First, they appear transparent, and take a second 
+	to slowly fade into opaque white. After that, they switch to their proper color and start 
+	to move - this signifies that the asteroid is done spawning, and will begin colliding with 
+	the player and bullets when they make contact.
 */
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class AsteroidSpawner : MonoBehaviour {
+	
     public float smallScale = 0.5f,
                  bigScale = 0.75f;
     public float minPlayerDistance = 0.2f;
@@ -27,7 +33,7 @@ public class AsteroidSpawner : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-		if (!isSpawned)
+	if (!isSpawned)
         {
             Color oldColor = spriteRenderer.color;
             spriteRenderer.color += new Color(0, 0, 0, Time.deltaTime);  // Make sprite more opaque, being solid by 1s
@@ -39,7 +45,7 @@ public class AsteroidSpawner : MonoBehaviour {
                 isSpawned = true;
             }
         }
-	}
+    }
 
     void Spawn()
     {
