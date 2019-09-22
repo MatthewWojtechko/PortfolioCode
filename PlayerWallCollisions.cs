@@ -1,6 +1,5 @@
 ﻿/*
-	As this class hangles wall collisions, it should be used before every regular movement update to the player.
-	
+	As this class handles wall collisions, it should be used before every typical movement update to the player.
 */
 using System.Collections;
 using System.Collections.Generic;
@@ -48,19 +47,8 @@ public class PlayerWallCollisions : MonoBehaviour
     [Tooltip("How long the linecast should be. Should be small, to avoid false positives saying there's ceiling.")]
     public float headCheckDistance = 0.01f;
 
-    [Header("Turn Colliders")]
-    [Tooltip("The colliders that surround the player used for turning corners. Should be put into the array clockwise, starting from the center top.")]
-    public Collider2D[] turnColliders = new Collider2D[8];
-
-
     public Direction verticalCollision = Direction.NONE;
     public Direction horizontalCollision = Direction.NONE;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
 
     // Update is called once per frame
     void Update()
@@ -75,9 +63,10 @@ public class PlayerWallCollisions : MonoBehaviour
         }
     }
 
-	// Determines whether a movement options would phase through a wall or not, when given the current and planned positions. // If the movement would phase, it returns the best alternative position. 
-	// If not, it returns the given potential new position as it was. This means that he Vector2 returned from this 
-	// function is always the proper new position for the player taking when into account wall collisions.
+    // Determines whether a movement options would phase through a wall or not, when given the current and planned positions. 
+    // If the movement would phase, it returns the best alternative position. 
+    // If not, it returns the given potential new position as it was. This means that he Vector2 returned from this 
+    // function is always the proper new position for the player taking when into account wall collisions.
     public Vector2 getPosition(Vector2 oldPos, Vector2 potentialNewPos)
     {
         verticalCollision = horizontalCollision = Direction.NONE;
@@ -233,16 +222,9 @@ public class PlayerWallCollisions : MonoBehaviour
         return true;
     }
 
-    private bool equalsAbout(float number1, float number2, float minCloseness)
-    {
-        if (Mathf.Abs(number1 - number2) <= minCloseness)
-            return true;
-        else
-            return false;
-    }
 
-	// Determines which side of a wall was hit, up, down, left, or right, given the wall's
-	// collider and the point of collision.
+    // Determines which side of a wall was hit, up, down, left, or right, given the wall's
+    // collider and the point of collision.
     Direction getWallHitSpot(Collider2D collider, Vector2 point)
     {
         float yScore, xScore;
@@ -310,11 +292,6 @@ public class PlayerWallCollisions : MonoBehaviour
         return isAgainstSurface(points, checkDistance, false);
     }
 
-    // Returns whether the collider, specified by an index for the turnColliders array, is free from contacting a wall.
-    public bool isTurnColliderOpen(int index)
-    {
-        return !turnColliders[index].IsTouchingLayers(WallLayerMask);
-    }
 
     // Returns true if there's a wall between the given set of points and a projected set of points, either above, below, to the left, or to the right of the original ones.
     // points is the list of Transforms, distance is how far the check will be, and isVertical determines if the check should be above/below (true) or should be (left/right).
