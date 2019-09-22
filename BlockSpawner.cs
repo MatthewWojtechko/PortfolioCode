@@ -19,21 +19,21 @@ public class BlockSpawner : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        // Each element is given each block's sprite renderer, and each is set to 0 opaque
-        BlockRenderers = new SpriteRenderer[Blocks.Length];
-        for (int i = 0; i < Blocks.Length; i++)
-        {
-            SpriteRenderer BlockRend = Blocks[i].GetComponent<SpriteRenderer>();
-            BlockRenderers[i] = BlockRend;
-            BlockRend.color = new Color(BlockRend.color.r, BlockRend.color.g, BlockRend.color.b, 0);
-        }
+           // Each element is given each block's sprite renderer, and each is set to 0 opaque
+           BlockRenderers = new SpriteRenderer[Blocks.Length];
+           for (int i = 0; i < Blocks.Length; i++)
+           {
+               SpriteRenderer BlockRend = Blocks[i].GetComponent<SpriteRenderer>();
+               BlockRenderers[i] = BlockRend;
+               BlockRend.color = new Color(BlockRend.color.r, BlockRend.color.g, BlockRend.color.b, 0);
+           }
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        // Makes the first invisible block more solid. When a block becomes fully visible, index is incremented, so this will work on the next block 
-        // when called next.
         lerpSpawnRate();
+	// Makes the first invisible block more solid. When a block becomes fully visible, index is incremented, so this will work on the next block 
+        // when called next.
         if (spawnIndex < Blocks.Length-1)
         {
             Color CurrentColor = BlockRenderers[spawnIndex].color;
@@ -51,6 +51,7 @@ public class BlockSpawner : MonoBehaviour {
             StartCoroutine(SpawnLastAndEnd());
 	}
 
+    // Waits a special amount of time and displays what should be the last block. Then, disables this script.
     IEnumerator SpawnLastAndEnd()
     {
         spawningDone = true;
@@ -61,6 +62,7 @@ public class BlockSpawner : MonoBehaviour {
         blockSpawnSFX.Play(0);
     }
 
+    // Gradually increase the speed the blocks appear.
     void lerpSpawnRate()
     {
         if (spawnRate != 0f)
