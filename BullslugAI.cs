@@ -91,14 +91,10 @@ public class BullslugAI : MonoBehaviour {
     private bool isAlive = true;
 
     public float realChargeSpeed;
-    // Use this for initialization
-    void Start () {
-		
-	}
 
     void Awake()
     {
-        // Find distance and angle of inclined ray. 
+        // Find distance and angle of inclined ray used for the bullslug's sight. 
         inclinedRayDistance = Mathf.Sqrt((sightDistance * sightDistance) + (sightHeight * sightHeight));
 
         currentRotation = fallRotationStart;
@@ -110,14 +106,14 @@ public class BullslugAI : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        foreach (ParticleSystem P in chargeParticles)
+        foreach (ParticleSystem P in chargeParticles)	// turn off chargeParticles
         {
             P.enableEmission = false;
         }
-        //alertParticles.enableEmission = false;
+	
+	// Determines the current state and performs the proper actions.    
         if (currentState == 1)
         {
-            //sRenderer.color = Color.black;
             wait();
             if (currentState == 2)
                 alertParticles.Play();
@@ -125,23 +121,19 @@ public class BullslugAI : MonoBehaviour {
         }
         else if (currentState == 2)
         {
-            //sRenderer.color = Color.red;
             alert();
         }
         else if (currentState == 3)
         {
-            //sRenderer.color = Color.red;
             prep();
             animationSpeed = prepSpeed * 5;
         }
         else if (currentState == 4)
         {
-            //sRenderer.color = Color.red;
             warn();
         }
         else if (currentState == 5)
         {
-            //sRenderer.color = Color.red;
             if (isMovingForward)
             {
                 foreach (ParticleSystem P in chargeParticles)
@@ -168,6 +160,7 @@ public class BullslugAI : MonoBehaviour {
 
         sprite.transform.localPosition = this.transform.localPosition;
         
+	// Make sure sprite is facing the right way
         if (xMovement > 0)
             sprite.transform.eulerAngles = new Vector3(sprite.transform.eulerAngles.x, sprite.transform.eulerAngles.y, this.transform.eulerAngles.z);
         else
@@ -320,10 +313,10 @@ public class BullslugAI : MonoBehaviour {
             }
 
         }
-        if (isHittingPlayer) // rammer adjusts field this automatically
+        if (isHittingPlayer) // rammer toggles this variable in its own code
             currentState = 6;
 
-        if (numPlatformCollisions == 0)
+        if (numPlatformCollisions == 0)  // if no long on the ground, set to fall state
         {
             currentState = 7;
             StartCoroutine(destroy());
@@ -348,13 +341,13 @@ public class BullslugAI : MonoBehaviour {
     private void fall()
     {
         float movement;
-        if (currentChargeSpeed < minimumFlingSpeed)
+        if (currentChargeSpeed < minimumFlingSpeed)	// make bullslug will spin fast enough
         {
             currentChargeSpeed = Mathf.Lerp(currentChargeSpeed, minimumFlingSpeed, flingConstant);
-            
         }
         movement = currentChargeSpeed;
-        if (isFacingRight)
+	    
+        if (isFacingRight)	// spin in proper direction
         {
             if (!isMovingForward)
                 movement *= -1;
@@ -367,20 +360,10 @@ public class BullslugAI : MonoBehaviour {
 
         currentFallSpeed = Mathf.Lerp(currentFallSpeed, maxFallSpeed, fallGravity);
 
+	// Set the transform values to spin and fall
         this.transform.localPosition = new Vector2(transform.localPosition.x + (movement * Time.deltaTime), transform.localPosition.y - (currentFallSpeed * Time.deltaTime));
         float rot = rotationConstant * currentChargeSpeed * Time.deltaTime;
-        this.transform.Rotate(0, 0, -1 * rot * Time.deltaTime);//
-        //if (movement > 0) //(transform.localPosition.x >= rightFallStop)
-        //{
-        //    Debug.Log("Right");
-        //    this.transform.Rotate(0, 0, -1 * rot * Time.deltaTime);
-        //}
-        //else
-        //{
-        //    Debug.Log("Left");
-        //    this.transform.Rotate(0, 0, rot * Time.deltaTime);
-        //}
-
+        this.transform.Rotate(0, 0, -1 * rot * Time.deltaTime);
     }
 
     // State 8: revert values to return to state 1
@@ -487,9 +470,9 @@ public class BullslugAI : MonoBehaviour {
     // Returns true if player is in sight - else false.
     // Uses rays to create a cone of sight - player is seen if the player comes into 
     // contact with a leg of this sight triangle, before the legs comes into contact 
-    // with something else. This allows the player to take cover behind something to hide.
+    // with something else, like a wall. This allows the player to take cover behind something to hide.
     // If the player is touching the bullslug, it automatically spots the player, and if 
-    // the player is outside the bullslug's zone, it automatically does not spot them.
+    // the player is outside the bullslug's zone, it can never spot them.
     private bool lookForPlayer()
     {
         if (isPlayerTouching)
@@ -717,6 +700,8 @@ public class BullslugAI : MonoBehaviour {
         }
     }
 
+    // Handles collisions. Counts how many grounds the bullslug is on top of, whether it is 
+    // touching the player, adn whether it is touching the lava.
     private void OnTriggerEnter2D(Collider2D collider)
     {
         if (collider.tag == "Platform")
@@ -743,10 +728,10 @@ public class BullslugAI : MonoBehaviour {
         GameObject.Destroy(this.gameObject);
     }
 
+    // If exiting a platform, decrement.
     private void OnTriggerExit2D(Collider2D collider)
     {
         if (collider.tag == "Platform")
-            if (collider.tag == "Platform")
                 numPlatformCollisions--;
     }
 }
