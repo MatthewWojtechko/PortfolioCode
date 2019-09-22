@@ -1,5 +1,5 @@
 /*
-	Loops through different colors for a constant color changing effect.
+	Loops through different colors for a continuous color-changing effect.
 */
 using System.Collections;
 using System.Collections.Generic;
@@ -10,16 +10,12 @@ public class LightColorChange : MonoBehaviour
     public float colorRate;
 
     private Light light;
-    private bool increaseComp; // T for inc, F for dec
-    private int changeColor; // which comp to change r = 1, g = 2, b = 3
+    private bool increaseComp; // T for increase, F for decrease
+    private int changeColor; // which color component to change: r = 1, g = 2, b = 3
+    
     void Awake()
     {
         light = GetComponent<Light>();
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        
     }
 
     // Update is called once per frame
@@ -33,9 +29,9 @@ public class LightColorChange : MonoBehaviour
          * rGB
          * rgB
          * RgB
-         * Note: a capital letter represents fully (1) that component color, 
-         * while a lowercase letter represents only partially (or 0) of that 
-         * component color.
+         * Note: a capital letter represents that color component is to its max (1), 
+         * while a lowercase letter represents that color component is less than 1 (or is 0). 
+	 * So, Rgb means that the color's r component is 1, but the other 2 components are less.
          */
         float redComp = light.color.r,
               greenComp = light.color.g,
