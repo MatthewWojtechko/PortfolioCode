@@ -79,7 +79,7 @@ the game that are not the player.
 		the speed. This lets the lava "keep up" with the player and 
 		for the speed to be conducive to balanced gameplay.
 
-______________________TEXT ADVENTURE CODE___________________________________
+__________________________TEXT ADVENTURE CODE_______________________________
 Various files from a text adventure protoype game built entirely in Java.
 
 	- Map1.java
